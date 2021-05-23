@@ -5,14 +5,17 @@ import javax.validation.constraints.NotBlank;
 
 import org.hibernate.validator.constraints.Length;
 
+import br.com.zupacademy.luiz.mercadolivre.seguranca.validacao.UnicoValor;
+
 import java.util.Base64;
 
 public class UsuarioRequest {
 
 	@Email
 	@NotBlank
+	@UnicoValor(targetClass = Usuario.class, field = "login", message = "Já existe um E-mail cadastrado.")
 	private String login;
-
+	
 	@Length(min = 6)
 	@NotBlank
 	private String senha;

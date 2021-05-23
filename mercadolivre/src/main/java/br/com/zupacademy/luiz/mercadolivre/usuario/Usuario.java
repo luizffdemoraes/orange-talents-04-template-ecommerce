@@ -20,7 +20,7 @@ public class Usuario {
 	private Instant instante = Instant.now();
 
 	@Email
-	@Column(nullable = false)
+	@Column(unique = true, nullable = false)
 	private String login;
 
 	@Column(nullable = false)
