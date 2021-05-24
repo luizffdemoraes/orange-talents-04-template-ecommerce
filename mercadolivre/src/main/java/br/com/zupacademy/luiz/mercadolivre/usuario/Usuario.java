@@ -1,6 +1,8 @@
 package br.com.zupacademy.luiz.mercadolivre.usuario;
 
+import java.io.Serializable;
 import java.time.Instant;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -10,7 +12,8 @@ import javax.validation.constraints.Email;
 import org.hibernate.annotations.CreationTimestamp;
 
 @Entity
-public class Usuario {
+public class Usuario implements Serializable {
+	private static final long serialVersionUID = 1L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

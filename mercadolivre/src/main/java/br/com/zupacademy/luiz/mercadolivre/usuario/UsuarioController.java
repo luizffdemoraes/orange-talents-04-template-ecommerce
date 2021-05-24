@@ -23,7 +23,8 @@ public class UsuarioController {
 
 	@PostMapping
 	@Transactional
-	public ResponseEntity<Usuario> cadastrar(@RequestBody @Valid UsuarioRequest request, UriComponentsBuilder builder) {
+	public ResponseEntity<?> cadastrar(@RequestBody @Valid UsuarioRequest request, 
+			UriComponentsBuilder builder) {
 
 		Usuario usuario = request.toModel();
 		manager.persist(usuario);

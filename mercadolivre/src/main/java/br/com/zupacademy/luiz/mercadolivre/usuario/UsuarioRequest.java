@@ -7,9 +7,11 @@ import org.hibernate.validator.constraints.Length;
 
 import br.com.zupacademy.luiz.mercadolivre.seguranca.validacao.UnicoValor;
 
+import java.io.Serializable;
 import java.util.Base64;
 
-public class UsuarioRequest {
+public class UsuarioRequest implements Serializable {
+	private static final long serialVersionUID = 1L;
 
 	@Email
 	@NotBlank
