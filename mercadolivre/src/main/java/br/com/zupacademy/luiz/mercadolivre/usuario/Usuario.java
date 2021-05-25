@@ -8,8 +8,14 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.validation.Valid;
 import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+
 import org.hibernate.annotations.CreationTimestamp;
+import org.springframework.util.Assert;
+import org.springframework.util.StringUtils;
 
 @Entity
 public class Usuario implements Serializable {
@@ -33,18 +39,17 @@ public class Usuario implements Serializable {
 	public Usuario() {
 	}
 
-	public Usuario(String login, String senha) {
+	public Usuario(@Email @NotBlank String login,
+			@Valid @NotNull SenhaLimpa senhaLimpa) {
+		Assert.isTrue(StringUtils.hasLength(login), "Login não pode ser em branco");
+		Assert.notNull(senhaLimpa, "O objeto do tipo senha limpa não pode ser nulo");
+		
 		this.login = login;
-		this.senha = senha;
-	}
-
-	@Override
-	public String toString() {
-		return "Usuario [id=" + id + ", instante=" + instante + ", login=" + login + ", senha=" + senha + "]";
+		this.senha = senhaLimpa.hash();
 	}
 
 	public Long getId() {
 		return id;
-	}	
+	}
 
 }
