@@ -7,6 +7,7 @@ import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 import javax.validation.Valid;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -18,8 +19,8 @@ import org.springframework.web.util.UriComponentsBuilder;
 @RequestMapping("/usuario")
 public class UsuarioController {
 
-	@PersistenceContext
-	private EntityManager manager;
+	  @Autowired
+	  UsuarioRepository usuarioRepository;
 
 	@PostMapping
 	@Transactional
@@ -27,7 +28,7 @@ public class UsuarioController {
 			UriComponentsBuilder builder) {
 
 		Usuario usuario = request.toModel();
-		manager.persist(usuario);
+		usuarioRepository.save(usuario);
 
 		URI uri = builder.path("/usuarios/{id}").buildAndExpand(usuario.getId()).toUri();
 		return ResponseEntity.created(uri).build();
