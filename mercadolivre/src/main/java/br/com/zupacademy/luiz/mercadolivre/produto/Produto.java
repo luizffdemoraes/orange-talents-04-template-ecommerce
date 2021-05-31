@@ -29,6 +29,7 @@ import io.jsonwebtoken.lang.Assert;
 import br.com.zupacademy.luiz.mercadolivre.categoria.Categoria;
 import br.com.zupacademy.luiz.mercadolivre.produto.caracteristica.Caracteristica;
 import br.com.zupacademy.luiz.mercadolivre.produto.caracteristica.CaracteristicaRequest;
+import br.com.zupacademy.luiz.mercadolivre.produto.imagem.Imagem;
 import br.com.zupacademy.luiz.mercadolivre.usuario.Usuario;
 
 @Entity
@@ -46,10 +47,11 @@ public class Produto {
 	@Column(nullable = false)
 	private Integer quantidade;
 
-
 	@Size(min = 3)
 	@OneToMany(mappedBy = "produto", cascade = CascadeType.PERSIST)
 	private Set<Caracteristica> caracteristicas = new HashSet<>();
+	@OneToMany(mappedBy = "produto", cascade = CascadeType.MERGE)
+	private Set<Imagem> imagens = new HashSet<Imagem>();
 
 	@Column(nullable = false)
 	private String descricao;
@@ -66,6 +68,10 @@ public class Produto {
 	@Column(nullable = false)
 	private Instant criadoEm = Instant.now();
 
+	@Deprecated
+	public Produto() {
+	}
+
 	public Produto(String nome, BigDecimal valor, Integer quantidade, String descricao, Categoria categoria,
 			Collection<CaracteristicaRequest> caracteristicas, Usuario usuario) {
 		this.nome = nome;
@@ -75,20 +81,32 @@ public class Produto {
 		this.categoria = categoria;
 		this.usuario = usuario;
 		this.caracteristicas.addAll(caracteristicas.stream().map(c -> c.toModel(this)).collect(Collectors.toSet()));
-		
+
 		Assert.isTrue(this.caracteristicas.size() >= 3, "Todo produto precisa ter no minimo 3 caracteristicas.");
 	}
 
 	@Override
 	public String toString() {
 		return "Produto [id=" + id + ", nome=" + nome + ", valor=" + valor + ", quantidade=" + quantidade
-				+ ", caracteristicas=" + caracteristicas + ", descricao=" + descricao + ", categoria=" + categoria
-				+ ", usuario=" + usuario + ", criadoEm=" + criadoEm + "]";
+				+ ", caracteristicas=" + caracteristicas + ", imagens=" + imagens + ", descricao=" + descricao
+				+ ", categoria=" + categoria + ", usuario=" + usuario + ", criadoEm=" + criadoEm + "]";
+	}
+	
+	
+
+	@Override
+	public boolean equals(Object obj) {
+		// TODO Auto-generated method stub
+		return super.equals(obj);
 	}
 
-	
+	public void associaImagens(Set<String> links) {
+		Set<Imagem> imagens = links.stream().map(link -> new Imagem(this, link)).collect(Collectors.toSet());
+		this.imagens.addAll(imagens);
+	}
 
-	
-	
+	public boolean pertenceAoUsuario(Usuario possivelDono) {
+		return this.usuario.equals(possivelDono);
+	}
 
 }

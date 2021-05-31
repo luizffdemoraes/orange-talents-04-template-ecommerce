@@ -26,6 +26,13 @@ public class Caracteristica {
 	@ManyToOne
 	@Valid
 	private Produto produto;
+	
+	
+	@Deprecated
+	public Caracteristica() {
+	}
+
+
 
 	public Caracteristica(String nome, String descricao, Produto produto) {
 		this.nome = nome;
