@@ -126,4 +126,10 @@ public class Usuario implements Serializable, UserDetails {
         return true;
     }
 
+	@Override
+	public String toString() {
+		return "Usuario [id=" + id + ", login=" + login + ", senha=" + senha + "]";
+	}
+
+    
 }

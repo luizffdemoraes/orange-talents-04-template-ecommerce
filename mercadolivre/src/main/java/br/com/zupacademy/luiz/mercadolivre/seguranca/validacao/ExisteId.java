@@ -10,13 +10,19 @@ import java.lang.annotation.*;
 @Constraint(validatedBy = ExisteIdValidador.class)
 @Documented
 public @interface ExisteId {
-    String message() default "Dado informado ${domainClass.getSimpleName()} com o id ${validatedValue. Não existe.}";
-    // aplicar validacao apenas para grupos especificos
+
+
+    String message() default "O dado informado não existe, por favor revise e tente novamente.";
+    //  aplicar validacao apenas para grupos especificos
     Class<?>[] groups() default {};
     // mandar informacao a mais para a validacao...
     Class<? extends Payload>[] payload() default {};
     // aqui vem basicamente o que a anotacao vai precisar para validar
-    //String fieldName();
+    
     Class<?> targetClass();
-    boolean shoudExist() default false;
+
+    String field();
+
+    boolean required() default false;
+    
 }

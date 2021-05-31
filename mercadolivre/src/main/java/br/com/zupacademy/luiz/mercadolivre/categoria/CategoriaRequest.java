@@ -2,10 +2,7 @@ package br.com.zupacademy.luiz.mercadolivre.categoria;
 
 import java.io.Serializable;
 import java.util.Optional;
-
-import javax.persistence.EntityManager;
 import javax.validation.constraints.NotBlank;
-
 import br.com.zupacademy.luiz.mercadolivre.seguranca.validacao.ExisteId;
 import br.com.zupacademy.luiz.mercadolivre.seguranca.validacao.UnicoValor;
 
@@ -18,7 +15,7 @@ public class CategoriaRequest implements Serializable{
 	@UnicoValor(targetClass = Categoria.class, field = "nome", message = "Já existe uma categoria cadastrada com esse nome.")
 	private String nome;
 
-	@ExisteId(targetClass = Categoria.class, shoudExist = true)
+	@ExisteId(targetClass = Categoria.class, field = "id")
 	private Long categoriaMaeId;
 
 	public String getNome() {
