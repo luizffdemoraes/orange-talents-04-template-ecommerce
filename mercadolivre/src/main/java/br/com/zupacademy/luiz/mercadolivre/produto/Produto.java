@@ -20,13 +20,9 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
 import javax.validation.Valid;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Positive;
 import javax.validation.constraints.Size;
 
 import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.validator.constraints.Length;
 
 import io.jsonwebtoken.lang.Assert;
 
@@ -34,7 +30,7 @@ import br.com.zupacademy.luiz.mercadolivre.categoria.Categoria;
 import br.com.zupacademy.luiz.mercadolivre.pergunta.Pergunta;
 import br.com.zupacademy.luiz.mercadolivre.produto.caracteristica.Caracteristica;
 import br.com.zupacademy.luiz.mercadolivre.produto.caracteristica.CaracteristicaRequest;
-import br.com.zupacademy.luiz.mercadolivre.produto.detalhe.DetalheProdutoCaracteristica;
+import br.com.zupacademy.luiz.mercadolivre.produto.opiniao.Opinioes;
 import br.com.zupacademy.luiz.mercadolivre.produto.imagem.Imagem;
 import br.com.zupacademy.luiz.mercadolivre.produto.opiniao.Opiniao;
 import br.com.zupacademy.luiz.mercadolivre.usuario.Usuario;
@@ -183,12 +179,14 @@ public class Produto {
 				.collect(Collectors.toCollection(TreeSet::new));
 	}
 
-	public<T> Set<T> mapeiaOpinioes(Function<Opiniao, T> funcaoMapeadora) {
-		return this.opinioes.stream().map(funcaoMapeadora)
-				.collect(Collectors.toSet());
+
+
+	public Opinioes getOpinioes() {
+
+		return new Opinioes(this.opinioes);
 	}
 	
 	
-
+	
 
 }

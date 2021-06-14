@@ -2,13 +2,11 @@ package br.com.zupacademy.luiz.mercadolivre.produto.detalhe;
 
 import java.math.BigDecimal;
 import java.util.Map;
-import java.util.OptionalDouble;
 import java.util.Set;
 import java.util.SortedSet;
-import java.util.stream.IntStream;
 
 import br.com.zupacademy.luiz.mercadolivre.produto.Produto;
-import br.com.zupacademy.luiz.mercadolivre.produto.opiniao.Opiniao;
+import br.com.zupacademy.luiz.mercadolivre.produto.opiniao.Opinioes;
 
 
 public class DetalheProdutoResponse {
@@ -21,6 +19,7 @@ public class DetalheProdutoResponse {
 	private SortedSet<String> perguntas;
 	private Set<Map<String, String>> opinioes;
 	private double mediaNotas;
+	private int total;
 
 	public DetalheProdutoResponse(Produto produto) {
 		this.descricao = produto.getDescricao();
@@ -30,18 +29,17 @@ public class DetalheProdutoResponse {
 		this.caracteristicas = produto.mapeiaCaracteristicas(DetalheProdutoCaracteristica::new);
 		this.linksImagens = produto.mapeiaImagens(imagem -> imagem.getLink());
 		this.perguntas = produto.mapeiaPerguntas(pergunta -> pergunta.getTitulo());
-		this.opinioes = produto.mapeiaOpinioes(opiniao -> {
+		
+		Opinioes opinioes = produto.getOpinioes();
+		
+		this.opinioes = opinioes.mapeiaOpinioes(opiniao -> {
 			return Map.of("titulo",opiniao.getTitulo(),"descricao",opiniao.getDescricao());
 		});
 		
-		Set<Integer> notas = produto.mapeiaOpinioes(opiniao ->  opiniao.getNota());
+			
+		this.mediaNotas = opinioes.media();
+		this.total = opinioes.total();
 		
-		OptionalDouble possivelMedia = notas.stream().mapToInt(nota -> nota).average();
-//		if(possivelMedia.isPresent()) {
-//			this.mediaNotas = possivelMedia.getAsDouble();
-//		}
-		
-		this.mediaNotas = possivelMedia.orElseGet(()-> 0.0);
 	}
 
 	public String getDescricao() {
@@ -76,6 +74,11 @@ public class DetalheProdutoResponse {
 		return mediaNotas;
 	}
 
+	public int getTotal() {
+		return total;
+	}
+
+	
 	
 }
 
