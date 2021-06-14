@@ -5,6 +5,9 @@ import java.time.Instant;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeSet;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import javax.persistence.CascadeType;
@@ -15,6 +18,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OrderBy;
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -27,9 +31,12 @@ import org.hibernate.validator.constraints.Length;
 import io.jsonwebtoken.lang.Assert;
 
 import br.com.zupacademy.luiz.mercadolivre.categoria.Categoria;
+import br.com.zupacademy.luiz.mercadolivre.pergunta.Pergunta;
 import br.com.zupacademy.luiz.mercadolivre.produto.caracteristica.Caracteristica;
 import br.com.zupacademy.luiz.mercadolivre.produto.caracteristica.CaracteristicaRequest;
+import br.com.zupacademy.luiz.mercadolivre.produto.detalhe.DetalheProdutoCaracteristica;
 import br.com.zupacademy.luiz.mercadolivre.produto.imagem.Imagem;
+import br.com.zupacademy.luiz.mercadolivre.produto.opiniao.Opiniao;
 import br.com.zupacademy.luiz.mercadolivre.usuario.Usuario;
 
 @Entity
@@ -52,7 +59,12 @@ public class Produto {
 	private Set<Caracteristica> caracteristicas = new HashSet<>();
 	@OneToMany(mappedBy = "produto", cascade = CascadeType.MERGE)
 	private Set<Imagem> imagens = new HashSet<Imagem>();
-
+	@OneToMany(mappedBy = "produto") 
+	@OrderBy("titulo asc")
+	private SortedSet<Pergunta> perguntas = new TreeSet<>();
+	@OneToMany(mappedBy = "produto", cascade = CascadeType.MERGE)
+	private Set<Opiniao> opinioes = new HashSet<>();
+	
 	@Column(nullable = false)
 	private String descricao;
 
@@ -67,6 +79,7 @@ public class Produto {
 	@CreationTimestamp
 	@Column(nullable = false)
 	private Instant criadoEm = Instant.now();
+
 
 	@Deprecated
 	public Produto() {
@@ -112,5 +125,70 @@ public class Produto {
 	public Usuario getDono() {
 		return this.usuario;
 	}
+
+	public Long getId() {
+		return id;
+	}
+
+	public String getNome() {
+		return nome;
+	}
+
+	public BigDecimal getValor() {
+		return valor;
+	}
+
+	public Integer getQuantidade() {
+		return quantidade;
+	}
+
+	public Set<Caracteristica> getCaracteristicas() {
+		return caracteristicas;
+	}
+
+	public Set<Imagem> getImagens() {
+		return imagens;
+	}
+
+	public String getDescricao() {
+		return descricao;
+	}
+
+	public Categoria getCategoria() {
+		return categoria;
+	}
+
+	public Usuario getUsuario() {
+		return usuario;
+	}
+
+	public Instant getCriadoEm() {
+		return criadoEm;
+	}
+	
+	
+
+	public <T> Set<T> mapeiaCaracteristicas(Function<Caracteristica, T> funcaoMapeadora) {
+		return this.caracteristicas.stream().map(funcaoMapeadora)
+				.collect(Collectors.toSet());
+	}
+
+	public<T> Set<T> mapeiaImagens(Function<Imagem, T> funcaoMapeadora) {
+		return this.imagens.stream().map(funcaoMapeadora)
+				.collect(Collectors.toSet());
+	}
+
+	public<T extends Comparable<T>> SortedSet<T> mapeiaPerguntas(Function<Pergunta, T> funcaoMapeadora) {
+		return this.perguntas.stream().map(funcaoMapeadora)
+				.collect(Collectors.toCollection(TreeSet::new));
+	}
+
+	public<T> Set<T> mapeiaOpinioes(Function<Opiniao, T> funcaoMapeadora) {
+		return this.opinioes.stream().map(funcaoMapeadora)
+				.collect(Collectors.toSet());
+	}
+	
+	
+
 
 }

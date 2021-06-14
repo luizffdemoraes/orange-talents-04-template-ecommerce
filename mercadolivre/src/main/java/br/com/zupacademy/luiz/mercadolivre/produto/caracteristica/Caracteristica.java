@@ -40,4 +40,30 @@ public class Caracteristica {
 		this.produto = produto;
 	}
 
+
+
+	public Long getId() {
+		return id;
+	}
+
+
+
+	public String getNome() {
+		return nome;
+	}
+
+
+
+	public String getDescricao() {
+		return descricao;
+	}
+
+
+
+	public Produto getProduto() {
+		return produto;
+	}
+	
+	
+
 }

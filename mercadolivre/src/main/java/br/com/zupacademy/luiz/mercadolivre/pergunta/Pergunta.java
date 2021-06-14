@@ -13,7 +13,7 @@ import br.com.zupacademy.luiz.mercadolivre.produto.Produto;
 import br.com.zupacademy.luiz.mercadolivre.usuario.Usuario;
 
 @Entity
-public class Pergunta {
+public class Pergunta implements Comparable<Pergunta>{
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -52,6 +52,15 @@ public class Pergunta {
 
 	public Usuario getDonoProduto() {
 		return produto.getDono();
+	}
+
+	@Override
+	public int compareTo(Pergunta o) {
+		return this.titulo.compareTo(titulo);
+	}
+
+	public String getTitulo() {
+		return titulo;
 	}
 
 }

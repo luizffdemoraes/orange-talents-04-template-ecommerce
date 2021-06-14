@@ -1,5 +1,7 @@
 package br.com.zupacademy.luiz.mercadolivre.produto.imagem;
 
+import java.util.Set;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -39,5 +41,11 @@ public class Imagem {
 	public String toString() {
 		return "Imagem [id=" + id + ", link=" + link + "]";
 	}
+
+	public String getLink() {
+		return link;
+	}
+
+
 
 }

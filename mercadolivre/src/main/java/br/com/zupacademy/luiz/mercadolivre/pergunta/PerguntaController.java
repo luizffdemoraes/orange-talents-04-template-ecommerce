@@ -30,6 +30,7 @@ public class PerguntaController {
 	public ResponseEntity<?> cadastrarPerguntas(@RequestBody @Valid PerguntaRequest request,
 			@PathVariable("id") Long id, @AuthenticationPrincipal Usuario usuarioLogado) {
 
+		
 		Produto produto = manager.find(Produto.class, id);
 		Pergunta novaPergunta = request.toModel(usuarioLogado, produto);
 		manager.persist(novaPergunta);
