@@ -109,4 +109,8 @@ public class Produto {
 		return this.usuario.equals(possivelDono);
 	}
 
+	public Usuario getDono() {
+		return this.usuario;
+	}
+
 }

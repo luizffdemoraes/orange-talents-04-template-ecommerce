@@ -121,7 +121,7 @@ public class Usuario implements Serializable, UserDetails {
         return true;
     }
 
-    @Override
+    @Override 
     public boolean isEnabled() {
         return true;
     }
@@ -129,6 +129,10 @@ public class Usuario implements Serializable, UserDetails {
 	@Override
 	public String toString() {
 		return "Usuario [id=" + id + ", login=" + login + ", senha=" + senha + "]";
+	}
+
+	public Object getEmail() {
+		return this.login;
 	}
 
     
