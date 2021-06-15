@@ -20,6 +20,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
 import javax.validation.Valid;
+import javax.validation.constraints.Positive;
 import javax.validation.constraints.Size;
 
 import org.hibernate.annotations.CreationTimestamp;
@@ -55,12 +56,12 @@ public class Produto {
 	private Set<Caracteristica> caracteristicas = new HashSet<>();
 	@OneToMany(mappedBy = "produto", cascade = CascadeType.MERGE)
 	private Set<Imagem> imagens = new HashSet<Imagem>();
-	@OneToMany(mappedBy = "produto") 
+	@OneToMany(mappedBy = "produto")
 	@OrderBy("titulo asc")
 	private SortedSet<Pergunta> perguntas = new TreeSet<>();
 	@OneToMany(mappedBy = "produto", cascade = CascadeType.MERGE)
 	private Set<Opiniao> opinioes = new HashSet<>();
-	
+
 	@Column(nullable = false)
 	private String descricao;
 
@@ -75,7 +76,6 @@ public class Produto {
 	@CreationTimestamp
 	@Column(nullable = false)
 	private Instant criadoEm = Instant.now();
-
 
 	@Deprecated
 	public Produto() {
@@ -100,8 +100,6 @@ public class Produto {
 				+ ", caracteristicas=" + caracteristicas + ", imagens=" + imagens + ", descricao=" + descricao
 				+ ", categoria=" + categoria + ", usuario=" + usuario + ", criadoEm=" + criadoEm + "]";
 	}
-	
-	
 
 	@Override
 	public boolean equals(Object obj) {
@@ -161,32 +159,34 @@ public class Produto {
 	public Instant getCriadoEm() {
 		return criadoEm;
 	}
-	
-	
 
 	public <T> Set<T> mapeiaCaracteristicas(Function<Caracteristica, T> funcaoMapeadora) {
-		return this.caracteristicas.stream().map(funcaoMapeadora)
-				.collect(Collectors.toSet());
+		return this.caracteristicas.stream().map(funcaoMapeadora).collect(Collectors.toSet());
 	}
 
-	public<T> Set<T> mapeiaImagens(Function<Imagem, T> funcaoMapeadora) {
-		return this.imagens.stream().map(funcaoMapeadora)
-				.collect(Collectors.toSet());
+	public <T> Set<T> mapeiaImagens(Function<Imagem, T> funcaoMapeadora) {
+		return this.imagens.stream().map(funcaoMapeadora).collect(Collectors.toSet());
 	}
 
-	public<T extends Comparable<T>> SortedSet<T> mapeiaPerguntas(Function<Pergunta, T> funcaoMapeadora) {
-		return this.perguntas.stream().map(funcaoMapeadora)
-				.collect(Collectors.toCollection(TreeSet::new));
+	public <T extends Comparable<T>> SortedSet<T> mapeiaPerguntas(Function<Pergunta, T> funcaoMapeadora) {
+		return this.perguntas.stream().map(funcaoMapeadora).collect(Collectors.toCollection(TreeSet::new));
 	}
-
-
 
 	public Opinioes getOpinioes() {
 
 		return new Opinioes(this.opinioes);
 	}
-	
-	
-	
+
+	public boolean abataEstoque(@Positive int quantidade) {
+		Assert.isTrue(quantidade > 0, "A quantidade deve ser maior que zero para abater o estoque " + quantidade);
+
+		if (quantidade <= this.quantidade) {
+			this.quantidade -= quantidade;
+			return true;
+		}
+
+		return false;
+
+	}
 
 }

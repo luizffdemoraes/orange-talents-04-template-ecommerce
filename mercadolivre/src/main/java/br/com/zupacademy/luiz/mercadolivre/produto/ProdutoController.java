@@ -1,6 +1,5 @@
 package br.com.zupacademy.luiz.mercadolivre.produto;
 
-import java.util.List;
 import java.util.Set;
 
 import javax.persistence.EntityManager;
