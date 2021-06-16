@@ -16,7 +16,7 @@ import br.com.zupacademy.luiz.mercadolivre.produto.Produto;
 import br.com.zupacademy.luiz.mercadolivre.usuario.Usuario;
 
 @RestController
-public class FinalizaCompra {
+public class FinalizaCompraParte1Controller {
 
 	@PersistenceContext
 	private EntityManager manager;

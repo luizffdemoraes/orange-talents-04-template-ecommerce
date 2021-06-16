@@ -1,14 +1,22 @@
 package br.com.zupacademy.luiz.mercadolivre.finalizacompra;
 
+import java.util.HashSet;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
+
+import org.springframework.util.Assert;
 
 import br.com.zupacademy.luiz.mercadolivre.produto.Produto;
 import br.com.zupacademy.luiz.mercadolivre.usuario.Usuario;
@@ -32,11 +40,12 @@ public class Compra {
 	@Enumerated
 	@NotNull
 	private GatewayPagamento gatewayPagamento;
+	@OneToMany(mappedBy = "compra", cascade = CascadeType.MERGE)
+	private Set<Transacao> transacoes = new HashSet<>();
 
-	
 	@Deprecated
 	public Compra() {
-		super();
+
 	}
 
 	public Compra(@NotNull @Valid Produto produtoASerComprado,@Positive int quantidade, @NotNull @Valid Usuario comprador, GatewayPagamento gatewayPagamento) {
@@ -66,6 +75,23 @@ public class Compra {
 	public String toString() {
 		return "Compra [id=" + id + ", produtoEscolhido=" + produtoEscolhido + ", quantidade=" + quantidade
 				+ ", comprador=" + comprador + "]";
+	}
+
+	public void adicionaTransacao(@Valid RetornoPagseguroRequest request) {
+		Transacao novaTransacao = request.toTransacao(this);
+
+
+		Assert.isTrue(!this.transacoes.contains(novaTransacao),
+				"Já existe uma transacao igual a essa processada "
+						+ novaTransacao);
+		
+		Set<Transacao> transacoesConcluidasComSucesso = this.transacoes.stream()
+				.filter(Transacao::concluidaComSucesso)
+				.collect(Collectors.toSet());
+
+		Assert.isTrue(transacoesConcluidasComSucesso.isEmpty(),"Esse compra já foi concluída com sucesso");
+
+		this.transacoes.add(novaTransacao);
 	}
 	
 	
