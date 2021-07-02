@@ -77,7 +77,7 @@ public class Produto {
 	@Column(nullable = false)
 	private Instant criadoEm = Instant.now();
 
-	@Deprecated
+
 	public Produto() {
 	}
 
@@ -92,6 +92,11 @@ public class Produto {
 		this.caracteristicas.addAll(caracteristicas.stream().map(c -> c.toModel(this)).collect(Collectors.toSet()));
 
 		Assert.isTrue(this.caracteristicas.size() >= 3, "Todo produto precisa ter no minimo 3 caracteristicas.");
+	}
+
+	public Produto(String string, int i, String string2, BigDecimal ten, Categoria categoria2, Usuario dono,
+			Collection<CaracteristicaRequest> caracteristicas2) {
+		// TODO Auto-generated constructor stub
 	}
 
 	@Override
