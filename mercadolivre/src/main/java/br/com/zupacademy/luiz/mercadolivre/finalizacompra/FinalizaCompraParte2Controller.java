@@ -34,6 +34,10 @@ public class FinalizaCompraParte2Controller {
 		compra.adicionaTransacao(retornoGatewayPagamento);		
 		manager.merge(compra);
 		
+		if(compra.processadaComSucesso()) {
+			
+		}
+		
 		return compra.toString();		
 	}
 
