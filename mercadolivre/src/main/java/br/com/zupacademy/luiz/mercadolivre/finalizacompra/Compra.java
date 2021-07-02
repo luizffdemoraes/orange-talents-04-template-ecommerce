@@ -77,8 +77,8 @@ public class Compra {
 				+ ", comprador=" + comprador + "]";
 	}
 
-	public void adicionaTransacao(@Valid RetornoPagseguroRequest request) {
-		Transacao novaTransacao = request.toTransacao(this);
+	public void adicionaTransacao(@Valid RetornoGatewayPagamento retornoGatewayPagamento) {
+		Transacao novaTransacao = retornoGatewayPagamento.toTransacao(this);
 
 
 		Assert.isTrue(!this.transacoes.contains(novaTransacao),

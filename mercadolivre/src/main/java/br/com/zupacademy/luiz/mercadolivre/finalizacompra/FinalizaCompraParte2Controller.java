@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class FinalizaCompraParte2Controller {
-
 	
 	@PersistenceContext
 	private EntityManager manager;
@@ -20,13 +19,22 @@ public class FinalizaCompraParte2Controller {
 	@PostMapping(value = "/retorno-pagseguro/{id}")
 	@Transactional
 	public String processamentoPagSeguro(@PathVariable("id") Long idCompra, @Valid RetornoPagseguroRequest request) {
+		return processa(idCompra, request);
+	}
+	
+	@PostMapping(value = "/retorno-paypal/{id}")
+	@Transactional
+	public String processamentoPaypal(@PathVariable("id") Long idCompra, @Valid RetornoPaypalRequest request) {
+		return processa(idCompra, request);
+	}
+	
 
+	private String processa(Long idCompra,RetornoGatewayPagamento retornoGatewayPagamento) {
 		Compra compra = manager.find(Compra.class, idCompra);
-		compra.adicionaTransacao(request);
-
+		compra.adicionaTransacao(retornoGatewayPagamento);		
 		manager.merge(compra);
-
-		return compra.toString();
+		
+		return compra.toString();		
 	}
 
 }
